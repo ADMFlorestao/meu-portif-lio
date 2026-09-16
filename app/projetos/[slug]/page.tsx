@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { notFound } from "next/navigation";
+import { ContactCta, SiteFooter, SiteHeader } from "@/components/site-shell";
+import { projects } from "@/lib/projects";
+export function generateStaticParams() { return projects.map(({ slug }) => ({ slug })); }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> { const { slug } = await params; const project = projects.find((item) => item.slug === slug); return project ? { title: project.name, description: project.shortDescription } : {}; }
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) { const { slug } = await params; const project = projects.find((item) => item.slug === slug); if (!project) notFound(); const current = projects.findIndex((item) => item.slug === slug); const next = projects[(current + 1) % projects.length]; return <><SiteHeader /><main><section className="case-hero shell"><Link className="back-link" href="/projetos"><ArrowLeft size={16} /> Todos os projetos</Link><p className="eyebrow">{project.category}</p><h1>{project.name}</h1><h2>{project.fullName}</h2><p>{project.overview}</p></section><section className="case-media shell"><Image src={project.image} alt={project.imageAlt} fill priority sizes="100vw" /></section><section className="case-content shell"><div><p className="eyebrow">Visão geral</p><h2>Ferramentas que acompanham o processo.</h2><p>{project.shortDescription}</p></div><div><p className="eyebrow">Funcionalidades</p><ul>{project.capabilities.map((item) => <li key={item}><Check size={16} /> {item}</li>)}</ul></div><div className="technology-block"><p className="eyebrow">Tecnologias e competências</p><div>{project.technologies.map((item) => <span key={item}>{item}</span>)}</div></div></section><Link className="next-project shell" href={`/projetos/${next.slug}`}><span>Próximo projeto</span><strong>{next.name} <ArrowRight size={24} /></strong></Link><ContactCta /></main><SiteFooter /></>; }
