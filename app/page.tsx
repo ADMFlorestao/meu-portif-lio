@@ -5,10 +5,10 @@ import { ContactCta, SiteFooter, SiteHeader } from "@/components/site-shell";
 import { projects } from "@/lib/projects";
 
 const services = [
-  { number: "01", title: "Sistemas web empresariais", description: "Plataformas completas para gestão, controle e análise operacional.", icon: Database, href: "/projetos/mira", image: "/images/projects/mira-reservatorios-demo.png", alt: "Painel demonstrativo do M.I.R.A." },
-  { number: "02", title: "Sistemas mobile personalizados", description: "Aplicações mobile sob medida para rotinas específicas da sua empresa.", icon: Smartphone, href: "/projetos/recebe", image: "/images/projects/recebe-mobile-demo.png", alt: "Aplicação mobile demonstrativa do R.E.C.E.B.E." },
-  { number: "03", title: "Automação e processamento de documentos", description: "Soluções para leitura, conferência e organização inteligente de documentos.", icon: FileStack, href: "/projetos/prisma", image: "/images/projects/prisma-home.jpeg", alt: "Interface do P.R.I.S.M.A. para processamento de documentos" },
-  { number: "04", title: "Automação de processos (RPA)", description: "Rotinas automatizadas para coleta de dados, integração e geração de relatórios.", icon: Braces, href: "/projetos/isa", image: "/images/projects/analise-relatorios.jpeg", alt: "Painel de análise e automação de relatórios" },
+  { number: "01", title: "Sistemas web empresariais", description: "Plataformas completas para gestão, controle e análise operacional.", icon: Database, href: "/projetos/mira", image: "/images/services/sistemas-web.png", alt: "Painel demonstrativo do M.I.R.A." },
+  { number: "02", title: "Sistemas mobile personalizados", description: "Aplicações mobile sob medida para rotinas específicas da sua empresa.", icon: Smartphone, href: "/projetos/recebe", image: "/images/services/sistemas-mobile.png", alt: "Aplicação mobile demonstrativa do R.E.C.E.B.E." },
+  { number: "03", title: "Automação e processamento de documentos", description: "Soluções para leitura, conferência e organização inteligente de documentos.", icon: FileStack, href: "/projetos/prisma", image: "/images/services/processamento-documentos.png", alt: "Interface do P.R.I.S.M.A. para processamento de documentos" },
+  { number: "04", title: "Automação de processos (RPA)", description: "Rotinas automatizadas para coleta de dados, integração e geração de relatórios.", icon: Braces, href: "/projetos/isa", image: "/images/services/automacao-rpa.png", alt: "Painel de análise e automação de relatórios" },
 ];
 
 export default function Home() {
