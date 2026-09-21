@@ -1,0 +1,104 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type Slide = { src: string; label: string; fit?: "contain" | "cover" };
+type Demo = { name: string; category: string; href: string; slides: Slide[] };
+
+const demos: Demo[] = [
+  { name: "M.I.R.A.", category: "Monitoramento e análise operacional", href: "/projetos/mira", slides: [
+    { src: "/images/demos/mira-entrada.jpeg", label: "Apresentação do sistema" },
+    { src: "/images/demos/mira-reservatorios.jpeg", label: "Visão dos reservatórios" },
+    { src: "/images/demos/mira-graficos.jpeg", label: "Análise das medições" },
+  ] },
+  { name: "R.E.C.E.B.E.", category: "Registro em campo e acompanhamento", href: "/projetos/recebe", slides: [
+    { src: "/images/demos/recebe-mobile.jpeg", label: "Registro mobile", fit: "contain" },
+    { src: "/images/demos/recebe-gestao.jpeg", label: "Visão administrativa" },
+  ] },
+  { name: "P.R.I.S.M.A.", category: "Organização inteligente de documentos", href: "/projetos/prisma", slides: [
+    { src: "/images/demos/prisma-inicio.jpeg", label: "Seleção da rotina" },
+    { src: "/images/demos/prisma-recibos.jpeg", label: "Envio e conferência dos arquivos" },
+    { src: "/images/demos/prisma-instalador.jpeg", label: "Organização nas pastas corretas", fit: "contain" },
+  ] },
+  { name: "Analisador de Vendas", category: "Leitura gerencial de relatórios", href: "/projetos/analise-relatorios", slides: [
+    { src: "/images/demos/vendas-visao-geral.jpeg", label: "Visão geral das vendas" },
+    { src: "/images/demos/vendas-detalhamento.jpeg", label: "Grupos e produtos mais vendidos" },
+  ] },
+  { name: "PRUMO", category: "Análise da produção e viabilidade", href: "/projetos", slides: [
+    { src: "/images/demos/prumo-apresentacao.jpeg", label: "Apresentação da análise" },
+    { src: "/images/demos/prumo-analise.jpeg", label: "Análise da produção", fit: "contain" },
+    { src: "/images/demos/prumo-detalhe.jpeg", label: "Detalhes de custos e formatos" },
+  ] },
+];
+
+const order = [0, 1, 2, -2, -1];
+
+export default function OrbitShowcase() {
+  const [active, setActive] = useState(0);
+  const [slide, setSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const onVisibility = () => setVisible(!document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (paused || reduced || !visible) return;
+    const timer = window.setTimeout(() => {
+      if (slide + 1 < demos[active].slides.length) {
+        setSlide(slide + 1);
+      } else {
+        setSlide(0);
+        setActive((active + 1) % demos.length);
+      }
+    }, slide + 1 === demos[active].slides.length ? 3800 : 3300);
+    return () => window.clearTimeout(timer);
+  }, [active, slide, paused, reduced, visible]);
+
+  const select = (index: number) => { setActive((index + demos.length) % demos.length); setSlide(0); };
+  const demo = demos[active];
+
+  return (
+    <section className="orbit-showcase" aria-label="Demonstrações dos sistemas">
+      <div className="orbit-viewport">
+        {demos.map((item, index) => {
+          const relative = (index - active + demos.length) % demos.length;
+          const position = order[relative];
+          const currentSlide = index === active ? slide : 0;
+          return <button key={item.name} type="button" className={`orbit-screen orbit-position-${position === -2 ? "back-left" : position === -1 ? "left" : position === 0 ? "front" : position === 1 ? "right" : "back-right"}`} onClick={() => select(index)} aria-label={index === active ? `${item.name}: ${item.slides[currentSlide].label}` : `Mostrar ${item.name}`} aria-current={index === active ? "true" : undefined} tabIndex={index === active ? 0 : -1}>
+            <span className="orbit-screen-label">{item.name}</span>
+            <span className="orbit-screen-media">
+              {item.slides.map((frame, frameIndex) => <span key={frame.src} className={`orbit-frame ${frameIndex === currentSlide ? "is-visible" : ""} ${frame.fit === "contain" ? "is-contained" : ""}`}><Image src={frame.src} alt={frame.label} fill sizes="(max-width: 900px) 100vw, 640px" priority={index === 0 && frameIndex === 0} /></span>)}
+            </span>
+          </button>;
+        })}
+      </div>
+      <div className="orbit-details" aria-live="polite">
+        <div><span className="orbit-kicker">Demonstração em destaque</span><strong>{demo.name}</strong><p>{demo.category} · {demo.slides[slide].label}</p></div>
+        <Link href={demo.href}>Ver projeto <ArrowRight size={16} /></Link>
+      </div>
+      <div className="orbit-controls">
+        <button type="button" onClick={() => select(active - 1)} aria-label="Sistema anterior"><ArrowLeft size={17} /></button>
+        <div className="orbit-dots" aria-label="Selecionar sistema">{demos.map((item, index) => <button key={item.name} type="button" className={index === active ? "is-active" : ""} onClick={() => select(index)} aria-label={`Mostrar ${item.name}`} aria-current={index === active ? "true" : undefined} />)}</div>
+        <button type="button" onClick={() => select(active + 1)} aria-label="Próximo sistema"><ArrowRight size={17} /></button>
+        <button type="button" onClick={() => setPaused(!paused)} aria-label={paused ? "Retomar apresentação" : "Pausar apresentação"}>{paused ? <Play size={17} /> : <Pause size={17} />}</button>
+        <span className="orbit-count">{String(slide + 1).padStart(2, "0")} / {String(demo.slides.length).padStart(2, "0")}</span>
+      </div>
+    </section>
+  );
+}
