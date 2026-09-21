@@ -5,35 +5,31 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 
-type Slide = { src: string; label: string; fit?: "contain" | "cover" };
-type Demo = { name: string; category: string; href: string; slides: Slide[] };
+type Slide = { src: string; label: string };
+type Demo = { name: string; summary: string; href: string; slides: Slide[] };
 
 const demos: Demo[] = [
-  { name: "M.I.R.A.", category: "Monitoramento e análise operacional", href: "/projetos/mira", slides: [
-    { src: "/images/demos/mira-entrada.jpeg", label: "Apresentação do sistema" },
-    { src: "/images/demos/mira-reservatorios.jpeg", label: "Visão dos reservatórios" },
-    { src: "/images/demos/mira-graficos.jpeg", label: "Análise das medições" },
+  { name: "M.I.R.A.", summary: "Sistema web para monitoramento e análise de reservatórios.", href: "/projetos/mira", slides: [
+    { src: "/images/demos/mira-entrada.jpeg", label: "Apresentação do M.I.R.A." },
+    { src: "/images/demos/mira-reservatorios.jpeg", label: "Monitoramento dos reservatórios" },
   ] },
-  { name: "R.E.C.E.B.E.", category: "Registro em campo e acompanhamento", href: "/projetos/recebe", slides: [
-    { src: "/images/demos/recebe-mobile.jpeg", label: "Registro mobile", fit: "contain" },
-    { src: "/images/demos/recebe-gestao.jpeg", label: "Visão administrativa" },
+  { name: "R.E.C.E.B.E.", summary: "Sistema web e mobile para registrar e acompanhar recebimentos em campo.", href: "/projetos/recebe", slides: [
+    { src: "/images/demos/recebe-gestao.jpeg", label: "Painel de gestão do R.E.C.E.B.E." },
+    { src: "/images/demos/recebe-em-campo.png", label: "Ilustração do uso mobile em campo" },
   ] },
-  { name: "P.R.I.S.M.A.", category: "Organização inteligente de documentos", href: "/projetos/prisma", slides: [
+  { name: "P.R.I.S.M.A.", summary: "Automação para conferir e organizar documentos de funcionários.", href: "/projetos/prisma", slides: [
     { src: "/images/demos/prisma-inicio.jpeg", label: "Seleção da rotina" },
-    { src: "/images/demos/prisma-recibos.jpeg", label: "Envio e conferência dos arquivos" },
-    { src: "/images/demos/prisma-instalador.jpeg", label: "Organização nas pastas corretas", fit: "contain" },
+    { src: "/images/demos/prisma-recibos.jpeg", label: "Envio e conferência dos documentos" },
   ] },
-  { name: "Analisador de Vendas", category: "Leitura gerencial de relatórios", href: "/projetos/analise-relatorios", slides: [
+  { name: "Analisador de Vendas", summary: "Sistema web para transformar relatórios de vendas em análises claras.", href: "/projetos/analise-relatorios", slides: [
     { src: "/images/demos/vendas-visao-geral.jpeg", label: "Visão geral das vendas" },
     { src: "/images/demos/vendas-detalhamento.jpeg", label: "Grupos e produtos mais vendidos" },
   ] },
-  { name: "PRUMO", category: "Análise da produção e viabilidade", href: "/projetos", slides: [
-    { src: "/images/demos/prumo-apresentacao.jpeg", label: "Apresentação da análise" },
-    { src: "/images/demos/prumo-analise.jpeg", label: "Análise da produção", fit: "contain" },
-    { src: "/images/demos/prumo-detalhe.jpeg", label: "Detalhes de custos e formatos" },
+  { name: "PRUMO", summary: "Sistema web para analisar custos, preços e viabilidade da produção.", href: "/projetos", slides: [
+    { src: "/images/demos/prumo-analise.jpeg", label: "Análise da produção" },
+    { src: "/images/demos/prumo-detalhe.jpeg", label: "Custos e formatos de venda" },
   ] },
 ];
-
 const order = [0, 1, 2, -2, -1];
 
 export default function OrbitShowcase() {
@@ -81,15 +77,14 @@ export default function OrbitShowcase() {
           const position = order[relative];
           const currentSlide = index === active ? slide : 0;
           return <button key={item.name} type="button" className={`orbit-screen orbit-position-${position === -2 ? "back-left" : position === -1 ? "left" : position === 0 ? "front" : position === 1 ? "right" : "back-right"}`} onClick={() => select(index)} aria-label={index === active ? `${item.name}: ${item.slides[currentSlide].label}` : `Mostrar ${item.name}`} aria-current={index === active ? "true" : undefined} tabIndex={index === active ? 0 : -1}>
-            <span className="orbit-screen-label">{item.name}</span>
             <span className="orbit-screen-media">
-              {item.slides.map((frame, frameIndex) => <span key={frame.src} className={`orbit-frame ${frameIndex === currentSlide ? "is-visible" : ""} ${frame.fit === "contain" ? "is-contained" : ""}`}><Image src={frame.src} alt={frame.label} fill sizes="(max-width: 900px) 100vw, 640px" priority={index === 0 && frameIndex === 0} /></span>)}
+              {item.slides.map((frame, frameIndex) => <span key={frame.src} className={`orbit-frame ${frameIndex === currentSlide ? "is-visible" : ""}`}><Image src={frame.src} alt={frame.label} fill sizes="(max-width: 900px) 100vw, 640px" priority={index === 0 && frameIndex === 0} /></span>)}
             </span>
           </button>;
         })}
       </div>
       <div className="orbit-details" aria-live="polite">
-        <div><span className="orbit-kicker">Demonstração em destaque</span><strong>{demo.name}</strong><p>{demo.category} · {demo.slides[slide].label}</p></div>
+        <div><strong>{demo.name}</strong><p>{demo.summary}</p></div>
         <Link href={demo.href}>Ver projeto <ArrowRight size={16} /></Link>
       </div>
       <div className="orbit-controls">
