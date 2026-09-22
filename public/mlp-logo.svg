@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 64" fill="none" role="img" aria-labelledby="title">
-  <title id="title">MLP</title>
-  <path d="M6 52V12L22 36L38 12V52" stroke="#46E7EE" stroke-width="5.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M49 12V52H66" stroke="#F0FBFC" stroke-width="5.5" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M76 52V12H87C94 12 99 17 99 25S94 38 87 38H76" stroke="#46E7EE" stroke-width="5.5" stroke-linecap="square" stroke-linejoin="miter"/>
-</svg>
