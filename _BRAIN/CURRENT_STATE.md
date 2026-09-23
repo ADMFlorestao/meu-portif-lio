@@ -6,8 +6,8 @@ Verificado em **21/09/2026** por inspeção de arquivos e Git. Build, preview e 
 
 - Stack: TypeScript/TSX, React 19, Next.js App Router, Vinext/Vite e Tailwind CSS 4; npm com `package-lock.json`.
 - Rotas: `/`, `/projetos` e `/projetos/[slug]`. A rota dinâmica gera páginas para os seis slugs atualmente definidos em [`lib/projects.ts`](../lib/projects.ts): `mira`, `recebe`, `prisma`, `isa`, `caixa-banhos` e `analise-relatorios`.
-- Home: headline comercial, demonstrações interativas, quatro serviços, prévias de projetos e CTA de contato.
-- Projetos: listagem pelos nomes reais e case com visão geral, imagem, funcionalidades e tecnologias/competências.
+- Home: headline comercial, demonstrações interativas, quatro serviços e CTA de contato. A listagem de projetos fica concentrada em `/projetos`.
+- Projetos: listagem pelos nomes reais, filtro por área, resumo de finalidade, área de uso e benefícios. Cada case apresenta visão geral, imagem, funcionalidades e tecnologias/competências.
 - Layout compartilhado: header, navegação desktop/mobile, CTA e footer. Estilos responsivos e preferência por movimento reduzido constam em [`app/globals.css`](../app/globals.css).
 - Integrações efetivas da interface: links externos para WhatsApp e `mailto:`. O contato não usa formulário ou backend próprio.
 - Git na verificação: branch `master`, árvore limpa, último commit `d255d29` (21/09/2026); nenhum remote configurado.
