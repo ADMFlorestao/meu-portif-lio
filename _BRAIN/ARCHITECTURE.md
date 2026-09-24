@@ -21,7 +21,7 @@ Verificada em 21/09/2026. Este documento descreve o código presente, não uma m
 
 As páginas leem dados locais em TypeScript e renderizam a interface; o carrossel é um componente cliente. [`vite.config.ts`](../vite.config.ts) combina Vinext, Vite e plugin Cloudflare/Sites. [`package.json`](../package.json) define `dev`, `build`, `start` e `lint`; npm é o gerenciador indicado pelo lockfile. Tailwind CSS 4 entra por [`app/globals.css`](../app/globals.css) e [`postcss.config.mjs`](../postcss.config.mjs).
 
-[`README.md`](../README.md) documenta os comandos e o ciclo operacional do starter. A configuração em [`.openai/hosting.json`](../.openai/hosting.json) contém um projeto Sites, com D1 e R2 definidos como `null`. Não há remote Git configurado na data da verificação. Esta documentação não afirma que um deploy foi realizado.
+[`README.md`](../README.md) documenta os comandos e o ciclo operacional do starter. A configuração em [`.openai/hosting.json`](../.openai/hosting.json) contém um projeto Sites, com D1 e R2 definidos como `null`. Para implantação independente, [`render.yaml`](../render.yaml) descreve um Web Service Node no Render: instala pelas dependências travadas, executa o build existente e inicia o Worker compilado com [`scripts/render-start.mjs`](../scripts/render-start.mjs), respeitando a variável `PORT` e escutando em `0.0.0.0`. Não há remote Git configurado na data da verificação. Esta documentação não afirma que um deploy foi realizado.
 
 ## Integrações
 
