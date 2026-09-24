@@ -1,31 +1,13 @@
 import { spawn } from "node:child_process";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 
 const port = process.env.PORT ?? "10000";
-const wrangler = fileURLToPath(
-  new URL("../node_modules/wrangler/bin/wrangler.js", import.meta.url),
+const next = fileURLToPath(
+  new URL("../node_modules/next/dist/bin/next", import.meta.url),
 );
-const envLoader = fileURLToPath(new URL("./sites-env.mjs", import.meta.url));
-
 const child = spawn(
   process.execPath,
-  [
-    "--import",
-    pathToFileURL(envLoader).href,
-    wrangler,
-    "dev",
-    "--config",
-    "dist/server/wrangler.json",
-    "--local",
-    "--persist-to",
-    ".wrangler/state",
-    "--ip",
-    "0.0.0.0",
-    "--port",
-    port,
-    "--inspector-port",
-    "0",
-  ],
+  [next, "start", "--hostname", "0.0.0.0", "--port", port],
   { stdio: "inherit" },
 );
 
