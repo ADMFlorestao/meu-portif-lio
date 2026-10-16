@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Slide = { src: string; label: string };
@@ -37,6 +37,8 @@ export default function OrbitShowcase() {
   const [slide, setSlide] = useState(0);
   const [reduced, setReduced] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -53,7 +55,7 @@ export default function OrbitShowcase() {
   }, []);
 
   useEffect(() => {
-    if (reduced || !visible) return;
+    if (reduced || !visible || paused || hovered) return;
     const timer = window.setTimeout(() => {
       if (slide + 1 < demos[active].slides.length) {
         setSlide(slide + 1);
@@ -63,28 +65,49 @@ export default function OrbitShowcase() {
       }
     }, slide + 1 === demos[active].slides.length ? 3800 : 3300);
     return () => window.clearTimeout(timer);
-  }, [active, slide, reduced, visible]);
+  }, [active, slide, reduced, visible, paused, hovered]);
 
-  const select = (index: number) => { setActive((index + demos.length) % demos.length); setSlide(0); };
+  const select = (index: number) => { setPaused(true); setActive((index + demos.length) % demos.length); setSlide(0); };
+  const step = (direction: number) => {
+    setPaused(true);
+    const nextSlide = slide + direction;
+    if (nextSlide >= 0 && nextSlide < demos[active].slides.length) {
+      setSlide(nextSlide);
+    } else {
+      const nextActive = (active + direction + demos.length) % demos.length;
+      setActive(nextActive);
+      setSlide(direction > 0 ? 0 : demos[nextActive].slides.length - 1);
+    }
+  };
   const demo = demos[active];
 
   return (
-    <section className="orbit-showcase" aria-label="Demonstrações dos sistemas">
+    <section className="orbit-showcase" aria-label="Demonstrações dos sistemas"
+      onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(true); }}
+      onPointerLeave={() => setHovered(false)}
+      onFocusCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget) && !(event.target as HTMLElement).closest(".showcase-playback")) setPaused(true); }}>
+      <div className="showcase-controls" role="group" aria-label="Controles das demonstrações">
+        <button type="button" onClick={() => step(-1)} aria-label="Imagem anterior"><ArrowLeft size={18} /></button>
+        {!reduced && <button type="button" className="showcase-playback" onClick={() => setPaused(value => !value)}>
+          {paused ? <Play size={16} /> : <Pause size={16} />}{paused ? "Retomar animação" : "Pausar animação"}
+        </button>}
+        <button type="button" onClick={() => step(1)} aria-label="Próxima imagem"><ArrowRight size={18} /></button>
+      </div>
       <div className="orbit-viewport">
         {demos.map((item, index) => {
           const relative = (index - active + demos.length) % demos.length;
           const position = order[relative];
           const currentSlide = index === active ? slide : 0;
-          return <button key={item.name} type="button" className={`orbit-screen orbit-position-${position === -2 ? "back-left" : position === -1 ? "left" : position === 0 ? "front" : position === 1 ? "right" : "back-right"}`} onClick={() => select(index)} aria-label={index === active ? `${item.name}: ${item.slides[currentSlide].label}` : `Mostrar ${item.name}`} aria-current={index === active ? "true" : undefined} tabIndex={0}>
+          return <button key={item.name} type="button" className={`orbit-screen orbit-position-${position === -2 ? "back-left" : position === -1 ? "left" : position === 0 ? "front" : position === 1 ? "right" : "back-right"}`} onClick={() => select(index)} aria-label={`Mostrar ${item.name}`} aria-current={index === active ? "true" : undefined} tabIndex={0}>
             <span className="orbit-screen-media">
-              {item.slides.map((frame, frameIndex) => <span key={frame.src} className={`orbit-frame ${frameIndex === currentSlide ? "is-visible" : ""}`}><Image src={frame.src} alt={frame.label} fill sizes="(max-width: 900px) 100vw, 640px" priority={index === 0 && frameIndex === 0} /></span>)}
+              {item.slides.map((frame, frameIndex) => <span key={frame.src} aria-hidden={frameIndex !== currentSlide} className={`orbit-frame ${frameIndex === currentSlide ? "is-visible" : ""}`}><Image src={frame.src} alt={frame.label} fill sizes="(max-width: 900px) 100vw, 640px" priority={index === 0 && frameIndex === 0} /></span>)}
             </span>
           </button>;
         })}
       </div>
-      <div className="orbit-details" aria-live="polite">
+      <div className="orbit-details" aria-live={paused || reduced ? "polite" : "off"} aria-atomic="true">
         <div><strong>{demo.name}</strong><p>{demo.summary}</p></div>
-        <Link href={demo.href}>Ver projeto <ArrowRight size={16} /></Link>
+        <Link href={demo.href}>{demo.href === "/projetos" ? "Explorar projetos" : "Ver projeto"} <ArrowRight size={16} /></Link>
       </div>
     </section>
   );
