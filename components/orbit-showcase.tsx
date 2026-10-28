@@ -18,8 +18,8 @@ const demos: Demo[] = [
     { src: "/images/demos/recebe-em-campo.png", label: "Ilustração do uso mobile em campo" },
   ] },
   { name: "P.R.I.S.M.A.", summary: "Automação para conferir e organizar documentos de funcionários.", href: "/projetos/prisma", slides: [
-    { src: "/images/demos/prisma-inicio.jpeg", label: "Seleção da rotina" },
-    { src: "/images/demos/prisma-recibos.jpeg", label: "Envio e conferência dos documentos" },
+    { src: "/images/projects/prisma-login.png", label: "Tela de acesso ao PRISMA" },
+    { src: "/images/projects/prisma-area-trabalho.png", label: "Área de trabalho administrativa do PRISMA" },
   ] },
   { name: "Analisador de Vendas", summary: "Sistema web para transformar relatórios de vendas em análises claras.", href: "/projetos/analise-relatorios", slides: [
     { src: "/images/demos/vendas-visao-geral.jpeg", label: "Visão geral das vendas" },

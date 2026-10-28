@@ -74,3 +74,5 @@
 .showcase-controls button:hover{border-color:var(--accent);color:var(--accent)}
 .showcase-controls .showcase-playback{min-width:170px}
 @media(max-width:600px){:where(#servicos,#contato,#sobre){scroll-margin-top:86px}.orbit-details{flex-wrap:wrap}.orbit-details>a{min-height:44px}}
+
+.case-secondary-media{margin-top:24px}
