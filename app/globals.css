@@ -76,3 +76,13 @@
 @media(max-width:600px){:where(#servicos,#contato,#sobre){scroll-margin-top:86px}.orbit-details{flex-wrap:wrap}.orbit-details>a{min-height:44px}}
 
 .case-secondary-media{margin-top:24px}
+
+/* Approved MLP lockup: transparent artwork with readable teal on navy. */
+.brand-logo{display:block;width:200px;height:112px;object-fit:contain;filter:brightness(0) saturate(100%) invert(86%) sepia(15%) saturate(782%) hue-rotate(123deg) brightness(93%) contrast(90%)}
+.header-inner{height:132px}
+.hero{min-height:calc(100vh - 132px)}
+.footer-brand{flex-direction:column;align-items:flex-start;gap:16px}
+.footer-logo{width:240px;height:144px}
+:where(#servicos,#contato,#sobre){scroll-margin-top:148px}
+@media(max-width:900px){.hero{min-height:auto}}
+@media(max-width:600px){.header-inner{height:112px}.brand-logo{width:174px;height:96px}.footer-logo{width:240px;height:144px}:where(#servicos,#contato,#sobre){scroll-margin-top:128px}}
